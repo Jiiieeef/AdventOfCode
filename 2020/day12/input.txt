@@ -1,4 +1,4 @@
-const input = `R90
+R90
 F58
 S2
 E4
@@ -767,69 +767,4 @@ F53
 R90
 W5
 S3
-F94`;
-const inputArray = input.split('\n');
-
-const NORTH = 'N';
-const EAST = 'E';
-const SOUTH = 'S';
-const WEST = 'W';
-const DIRECTIONS = [NORTH, EAST, SOUTH ,WEST];
-
-const RIGHT = 'R';
-const LEFT = 'L';
-const TURNS = [RIGHT, LEFT];
-
-const FORWARD = 'F';
-
-const mapping = {
-  [NORTH]: (coordinates, value) => ({...coordinates, Y: coordinates.Y + value}),
-  [SOUTH]: (coordinates, value) => ({...coordinates, Y: coordinates.Y - value}),
-  [EAST]: (coordinates, value) => ({...coordinates, X: coordinates.X + value}),
-  [WEST]: (coordinates, value) => ({...coordinates, X: coordinates.X - value})
-};
-
-const splitInstruction = (instruction) => {
-  const value = instruction.match(/[0-9]+$/g)[0];
-  const letter = instruction[0];
-
-  return [letter, +value];
-};
-
-const rotateShip = (letter, value) => {
-  const degrees = value / 90;
-  let positionIndex = DIRECTIONS.indexOf(currentDirection);
-  const rotation = letter === RIGHT ? 1 : -1;
-
-  for (let i = 0; i < degrees; i++) {
-    if (positionIndex + rotation === DIRECTIONS.length) {
-      positionIndex = 0;
-    } else if (positionIndex + rotation < 0) {
-      positionIndex = DIRECTIONS.length - 1;
-    } else {
-      positionIndex += rotation;
-    }
-  }
-
-  return DIRECTIONS[positionIndex];
-};
-
-let currentDirection = EAST;
-let shipCoordinates = {
-  X: 0,
-  Y: 0
-};
-
-// Part 1
-inputArray.forEach(instruction => {
-  const [letter, value] = splitInstruction(instruction);
-
-  if (DIRECTIONS.includes(letter)) {
-    shipCoordinates = mapping[letter](shipCoordinates, value);
-  } else if (TURNS.includes(letter)) {
-    currentDirection = rotateShip(letter, value);
-  } else {
-    shipCoordinates = mapping[currentDirection](shipCoordinates, value);
-  }
-});
-console.log(shipCoordinates, Math.abs(shipCoordinates.X) + Math.abs(shipCoordinates.Y))
+F94
